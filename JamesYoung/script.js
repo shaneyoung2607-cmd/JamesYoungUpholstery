@@ -2,18 +2,48 @@
   'use strict';
 
   var QUOTE_EMAIL = 'info@jamesinteriors.ie';
+  var GA_ID = 'G-V3T1QJDYNB'; // James's existing Google Analytics 4 property
+
+  /* Cookie consent: Google Analytics only loads after the visitor accepts */
+  var CONSENT_KEY = 'jy-consent';
+  var cookieBox = document.getElementById('cookie');
+  function readConsent() { try { return localStorage.getItem(CONSENT_KEY); } catch (e) { return null; } }
+  function saveConsent(v) { try { localStorage.setItem(CONSENT_KEY, v); } catch (e) {} }
+  function loadAnalytics() {
+    if (window.gtag) return;
+    window.dataLayer = window.dataLayer || [];
+    window.gtag = function () { window.dataLayer.push(arguments); };
+    window.gtag('js', new Date());
+    window.gtag('config', GA_ID, { anonymize_ip: true });
+    var s = document.createElement('script');
+    s.async = true; s.src = 'https://www.googletagmanager.com/gtag/js?id=' + GA_ID;
+    document.head.appendChild(s);
+  }
+  var consent = readConsent();
+  if (consent === 'yes') loadAnalytics();
+  else if (consent !== 'no') cookieBox.hidden = false;
+  cookieBox.addEventListener('click', function (e) {
+    var v = e.target.dataset && e.target.dataset.consent; if (!v) return;
+    saveConsent(v); cookieBox.hidden = true;
+    if (v === 'yes') loadAnalytics();
+  });
+  document.getElementById('cookieSettings').addEventListener('click', function () { cookieBox.hidden = false; });
 
   /* ---------------------------------------------------------------
      OUR WORK GALLERY
      To add a photo: put the file in the images folder, then add a
      line below. type is one of: commercial, domestic, restoration.
+     size is optional: 'tall' (two rows high, suits upright photos)
+     or 'wide' (two columns wide, suits landscape photos).
      Photos show in the order listed here.
      --------------------------------------------------------------- */
   var WORK = [
-    { src: 'images/banquette-bar.jpg',        type: 'commercial', title: 'Channel-tufted velvet banquette', place: 'Hotel bar, Dublin' },
-    { src: 'images/function-room-chairs.jpg', type: 'commercial', title: 'Function room chairs',            place: 'Event venue, Dublin' },
-    { src: 'images/office-chairs.jpg',        type: 'commercial', title: 'Green leather office chairs',     place: 'Reupholstered in our workshop' },
-    { src: 'images/banquette-restaurant.jpg', type: 'commercial', title: 'Velvet banquette seating',        place: 'Hotel restaurant, Dublin' }
+    { src: 'images/wingback-chair.jpg',         type: 'domestic',   title: 'Wingback armchair in willow-leaf weave', place: 'Reupholstered in our workshop', size: 'tall' },
+    { src: 'images/function-room-chairs.jpg',   type: 'commercial', title: 'Function room chairs',            place: 'Event venue, Dublin' },
+    { src: 'images/office-chairs.jpg',          type: 'commercial', title: 'Green leather office chairs',     place: 'Reupholstered in our workshop' },
+    { src: 'images/hotel-lounge-banquette.jpg', type: 'commercial', title: 'Channel-tufted velvet banquette', place: 'Hotel lounge, Dublin', size: 'wide' },
+    { src: 'images/showroom.jpg',               type: 'domestic',   title: 'Corner sofa, headboards and wall panels', place: 'Our showroom, North County Dublin', size: 'wide' },
+    { src: 'images/banquette-bar.jpg',          type: 'commercial', title: 'Velvet banquette and cushions',   place: 'Hotel bar, Dublin' },
   ];
 
   document.getElementById('year').textContent = new Date().getFullYear();
@@ -78,7 +108,7 @@
   var empty = document.getElementById('galleryEmpty');
   var tiles = WORK.map(function (w, i) {
     var b = document.createElement('button');
-    b.type = 'button'; b.className = 'tile reveal'; b.dataset.type = w.type; b.dataset.i = i;
+    b.type = 'button'; b.className = 'tile reveal' + (w.size ? ' tile--' + w.size : ''); b.dataset.type = w.type; b.dataset.i = i;
     b.setAttribute('aria-label', 'View photo: ' + w.title);
     var img = document.createElement('img');
     img.src = w.src; img.alt = w.title + ', ' + w.place; img.loading = 'lazy';

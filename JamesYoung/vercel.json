@@ -1,0 +1,12 @@
+{
+  "redirects": [
+    { "source": "/domestic-upholstery", "destination": "/#services", "permanent": true },
+    { "source": "/commercial-upholstery", "destination": "/#commercial", "permanent": true },
+    { "source": "/restoration-repair", "destination": "/#services", "permanent": true },
+    { "source": "/custom-furniture", "destination": "/#services", "permanent": true },
+    { "source": "/upholsterer-dublin", "destination": "/#visit", "permanent": true },
+    { "source": "/contact", "destination": "/#visit", "permanent": true },
+    { "source": "/thank-you", "destination": "/", "permanent": true },
+    { "source": "/blank", "destination": "/", "permanent": true }
+  ]
+}
