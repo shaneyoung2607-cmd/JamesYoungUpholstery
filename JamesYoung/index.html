@@ -14,9 +14,8 @@
 <meta property="og:url" content="https://www.jamesinteriors.ie/">
 <meta property="og:image" content="https://www.jamesinteriors.ie/images/hotel-lounge-banquette.jpg">
 <meta property="og:locale" content="en_IE">
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,500;0,600;1,500;1,600&family=Jost:wght@300;400;500;600&display=swap" rel="stylesheet">
+<link rel="preload" href="fonts/cormorant-garamond.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="preload" href="fonts/jost.woff2" as="font" type="font/woff2" crossorigin>
 <link rel="stylesheet" href="styles.css">
 <script type="application/ld+json">
 {
@@ -319,7 +318,7 @@
 
         <fieldset class="step" data-step="4">
           <legend>Where should we send your quote?</legend>
-          <p class="hint">We only use these details to reply to you.</p>
+          <p class="hint">We only use these details to reply to you. See our <a href="privacy.html">privacy policy</a>.</p>
           <div class="fields">
             <label>Name<input type="text" name="name" autocomplete="name" required></label>
             <label>Phone<input type="tel" name="phone" autocomplete="tel" required></label>
@@ -371,15 +370,20 @@
       <div>
         <p class="kicker kicker--dark">Reviews</p>
         <h2>What our customers say</h2>
+        <p class="muted reviews__intro">Read what homeowners and businesses across Dublin say about our work, in their own words on Google.</p>
       </div>
       <a href="https://www.google.com/search?q=James+Young+Upholstery+Dublin+reviews" class="btn btn--dark" target="_blank" rel="noopener">Read our Google reviews</a>
     </div>
-    <!-- Replace with real quotes from the Google Business Profile -->
+    <!--
+      To show real reviews here, copy them word for word from James's Google Business Profile
+      (never write or edit them), then paste this block back in with one <blockquote> per review.
+      Irish consumer law requires saying where reviews come from, so keep the "Review on Google" label.
+
     <div class="reviews">
-      <blockquote class="review reveal"><div class="stars" aria-label="5 out of 5 stars">★★★★★</div><p>“Add a real customer quote here from your Google reviews.”</p><footer>Customer name · Area</footer></blockquote>
-      <blockquote class="review reveal"><div class="stars" aria-label="5 out of 5 stars">★★★★★</div><p>“Add a real customer quote here from your Google reviews.”</p><footer>Customer name · Area</footer></blockquote>
-      <blockquote class="review reveal"><div class="stars" aria-label="5 out of 5 stars">★★★★★</div><p>“Add a real customer quote here from your Google reviews.”</p><footer>Customer name · Area</footer></blockquote>
+      <blockquote class="review reveal"><div class="stars" aria-label="5 out of 5 stars">★★★★★</div><p>“Exact review text from Google.”</p><footer>First name, area · Review on Google</footer></blockquote>
     </div>
+    <p class="reviews__source">Reviews are shown exactly as posted on our Google Business Profile. We don't edit them or pay for them.</p>
+    -->
   </div>
 </section>
 
@@ -395,9 +399,13 @@
       <li>Swords</li><li>Malahide</li><li>Donabate</li><li>Portmarnock</li><li>Howth</li><li>Skerries</li><li>Rush &amp; Lusk</li><li>Balbriggan</li><li>Dublin City</li>
     </ul>
     <div class="visit">
-      <div class="map reveal">
-        <iframe title="Map to the James Young Upholstery workshop" loading="lazy" referrerpolicy="no-referrer-when-downgrade"
-          src="https://www.google.com/maps?q=The+Shannon+Valley+Centre,+Turvey+Avenue,+Donabate,+K36+F660&output=embed"></iframe>
+      <div class="map reveal" id="map" data-src="https://www.google.com/maps?q=The+Shannon+Valley+Centre,+Turvey+Avenue,+Donabate,+K36+F660&amp;output=embed">
+        <div class="map__gate">
+          <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 21s-7-6.2-7-11.5a7 7 0 0 1 14 0C19 14.8 12 21 12 21z"/><circle cx="12" cy="9.5" r="2.5"/></svg>
+          <p class="map__addr">Unit 2, The Shannon Valley Centre, Turvey Avenue, K36 F660</p>
+          <button type="button" class="btn btn--outline" id="mapLoad">Show map</button>
+          <p class="map__note">Loads Google Maps, which may set cookies. <a href="privacy.html#cookies">Privacy policy</a></p>
+        </div>
       </div>
       <div class="visit__card reveal">
         <h3>James Young Upholstery</h3>
@@ -477,7 +485,7 @@
     </div>
   </div>
   <div class="wrap footer__base">
-    <span>© <span id="year">2026</span> James Young Upholstery. All rights reserved. <button type="button" class="footer__cookies" id="cookieSettings">Cookie settings</button></span>
+    <span>© <span id="year">2026</span> James Young Upholstery. All rights reserved. <a href="privacy.html" class="footer__cookies">Privacy policy</a> <button type="button" class="footer__cookies" id="cookieSettings">Cookie settings</button></span>
     <span class="credit">Website by <img src="images/siol-logo.svg" alt="" width="22" height="22"> <b>Síol Digital</b></span>
   </div>
 </footer>
@@ -485,13 +493,14 @@
 <a href="#quote" class="float-cta is-hidden">Free quote</a>
 
 <div class="cookie" id="cookie" role="dialog" aria-live="polite" aria-label="Cookie choice" hidden>
-  <p>We use Google Analytics cookies to see how visitors use this site. They're only set if you accept.</p>
+  <p>We use Google Analytics cookies to see how visitors use this site. They're only set if you accept. <a href="privacy.html#cookies">Learn more</a></p>
   <div class="cookie__btns">
     <button type="button" class="btn btn--outline" data-consent="no">Decline</button>
     <button type="button" class="btn btn--gold" data-consent="yes">Accept</button>
   </div>
 </div>
 
+<script src="consent.js"></script>
 <script src="script.js"></script>
 </body>
 </html>

@@ -2,32 +2,17 @@
   'use strict';
 
   var QUOTE_EMAIL = 'info@jamesinteriors.ie';
-  var GA_ID = 'G-V3T1QJDYNB'; // James's existing Google Analytics 4 property
+  /* Cookie consent and Google Analytics live in consent.js (shared with privacy.html) */
 
-  /* Cookie consent: Google Analytics only loads after the visitor accepts */
-  var CONSENT_KEY = 'jy-consent';
-  var cookieBox = document.getElementById('cookie');
-  function readConsent() { try { return localStorage.getItem(CONSENT_KEY); } catch (e) { return null; } }
-  function saveConsent(v) { try { localStorage.setItem(CONSENT_KEY, v); } catch (e) {} }
-  function loadAnalytics() {
-    if (window.gtag) return;
-    window.dataLayer = window.dataLayer || [];
-    window.gtag = function () { window.dataLayer.push(arguments); };
-    window.gtag('js', new Date());
-    window.gtag('config', GA_ID, { anonymize_ip: true });
-    var s = document.createElement('script');
-    s.async = true; s.src = 'https://www.googletagmanager.com/gtag/js?id=' + GA_ID;
-    document.head.appendChild(s);
-  }
-  var consent = readConsent();
-  if (consent === 'yes') loadAnalytics();
-  else if (consent !== 'no') cookieBox.hidden = false;
-  cookieBox.addEventListener('click', function (e) {
-    var v = e.target.dataset && e.target.dataset.consent; if (!v) return;
-    saveConsent(v); cookieBox.hidden = true;
-    if (v === 'yes') loadAnalytics();
+  /* Google Map only loads when the visitor asks for it */
+  document.getElementById('mapLoad').addEventListener('click', function () {
+    var map = document.getElementById('map');
+    var f = document.createElement('iframe');
+    f.title = 'Map to the James Young Upholstery workshop';
+    f.referrerPolicy = 'no-referrer-when-downgrade';
+    f.src = map.dataset.src;
+    map.innerHTML = ''; map.appendChild(f);
   });
-  document.getElementById('cookieSettings').addEventListener('click', function () { cookieBox.hidden = false; });
 
   /* ---------------------------------------------------------------
      OUR WORK GALLERY
