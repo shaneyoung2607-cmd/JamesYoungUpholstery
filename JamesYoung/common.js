@@ -38,7 +38,22 @@
     els.forEach(function (el) { io.observe(el); });
   }
   observeReveals(document.querySelectorAll('.reveal'));
-  window.JY = { observeReveals: observeReveals };
+
+  /* Conversion tracking: only sends if the visitor accepted Analytics (gtag exists).
+     These events can be imported into Google Ads as conversions. */
+  function track(name, params) {
+    if (typeof window.gtag === 'function') window.gtag('event', name, params || {});
+  }
+  document.addEventListener('click', function (e) {
+    var a = e.target.closest && e.target.closest('a[href^="tel:"], a[href^="mailto:"]');
+    if (!a) return;
+    var href = a.getAttribute('href');
+    track(href.indexOf('tel:') === 0 ? 'phone_call_click' : 'email_click', {
+      link_url: href, page_path: location.pathname
+    });
+  });
+
+  window.JY = { observeReveals: observeReveals, track: track };
 
   /* Open / closed status (Irish time) */
   var openDot = document.getElementById('openDot');

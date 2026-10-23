@@ -190,6 +190,7 @@
       'Notes: ' + e.notes.value.trim()
     ];
     var subject = 'Quote request: ' + val('piece') + ' (' + e.name.value.trim() + ')';
+    if (window.JY && window.JY.track) window.JY.track('generate_lead', { form: 'quote', piece: val('piece'), photos: photos.length });
     window.location.href = 'mailto:' + QUOTE_EMAIL + '?subject=' + encodeURIComponent(subject) + '&body=' + encodeURIComponent(lines.join('\n'));
     go(5);
   }
