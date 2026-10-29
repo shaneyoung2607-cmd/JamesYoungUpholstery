@@ -20,15 +20,17 @@
      line below. type is one of: commercial, domestic, restoration.
      size is optional: 'tall' (two rows high, suits upright photos)
      or 'wide' (two columns wide, suits landscape photos).
+     thumb is optional: a smaller copy shown in the grid, while the
+     full src opens in the lightbox.
      Photos show in the order listed here.
      --------------------------------------------------------------- */
   var WORK = [
-    { src: 'images/wingback-chair.jpg',         type: 'domestic',   title: 'Wingback armchair in willow-leaf weave', place: 'Reupholstered in our workshop', size: 'tall' },
-    { src: 'images/function-room-chairs.jpg',   type: 'commercial', title: 'Function room chairs',            place: 'Event venue, Dublin' },
-    { src: 'images/office-chairs.jpg',          type: 'commercial', title: 'Green leather office chairs',     place: 'Reupholstered in our workshop' },
-    { src: 'images/hotel-lounge-banquette.jpg', type: 'commercial', title: 'Channel-tufted velvet banquette', place: 'Hotel lounge, Dublin', size: 'wide' },
-    { src: 'images/showroom.jpg',               type: 'domestic',   title: 'Corner sofa, headboards and wall panels', place: 'Our showroom, North County Dublin', size: 'wide' },
-    { src: 'images/banquette-bar.jpg',          type: 'commercial', title: 'Velvet banquette and cushions',   place: 'Hotel bar, Dublin' },
+    { src: 'images/wingback-chair.webp',         thumb: 'images/wingback-chair-800.webp',         type: 'domestic',   title: 'Wingback armchair in willow-leaf weave', place: 'Reupholstered in our workshop', size: 'tall' },
+    { src: 'images/function-room-chairs.webp',                                                     type: 'commercial', title: 'Function room chairs',            place: 'Event venue, Dublin' },
+    { src: 'images/office-chairs.webp',                                                            type: 'commercial', title: 'Green leather office chairs',     place: 'Reupholstered in our workshop' },
+    { src: 'images/hotel-lounge-banquette.webp', thumb: 'images/hotel-lounge-banquette-800.webp', type: 'commercial', title: 'Channel-tufted velvet banquette', place: 'Hotel lounge, Dublin', size: 'wide' },
+    { src: 'images/showroom.webp',               thumb: 'images/showroom-800.webp',               type: 'domestic',   title: 'Corner sofa, headboards and wall panels', place: 'Our showroom, North County Dublin', size: 'wide' },
+    { src: 'images/banquette-bar.webp',                                                            type: 'commercial', title: 'Velvet banquette and cushions',   place: 'Hotel bar, Dublin' },
   ];
 
   /* Gallery + lightbox */
@@ -39,7 +41,7 @@
     b.type = 'button'; b.className = 'tile reveal' + (w.size ? ' tile--' + w.size : ''); b.dataset.type = w.type; b.dataset.i = i;
     b.setAttribute('aria-label', 'View photo: ' + w.title);
     var img = document.createElement('img');
-    img.src = w.src; img.alt = w.title + ', ' + w.place; img.loading = 'lazy';
+    img.src = w.thumb || w.src; img.alt = w.title + ', ' + w.place; img.loading = 'lazy';
     var cap = document.createElement('span');
     cap.className = 'tile__cap';
     cap.innerHTML = '<small></small>';
