@@ -658,9 +658,7 @@ b, strong { font-weight: 500; }
 .done__btns { display: flex; flex-wrap: wrap; justify-content: center; gap: 12px; margin-bottom: 14px; }
 .done__status { min-height: 1.7em; margin-bottom: 14px; color: var(--gold); font-size: .92rem; }
 
-/* ---------- Page-to-page and scroll motion ---------- */
-@view-transition { navigation: auto; }
-::view-transition-old(root), ::view-transition-new(root) { animation-duration: .22s; }
+/* ---------- Scroll motion ---------- */
 @keyframes reveal-in { from { opacity: 0; transform: translateY(24px); } }
 /* Where the browser can tie animation to scroll position, reveals follow the scroll itself.
    Elsewhere the IntersectionObserver in common.js adds .is-in, as before. */
@@ -671,7 +669,6 @@ b, strong { font-weight: 500; }
   }
 }
 @media (prefers-reduced-motion: reduce) {
-  @view-transition { navigation: none; }
   .svc__no, .svc__main, .float-cta { transition: none; }
 }
 
