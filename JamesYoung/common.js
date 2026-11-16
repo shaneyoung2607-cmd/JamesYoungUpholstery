@@ -16,17 +16,49 @@
   window.addEventListener('scroll', onScroll, { passive: true });
   onScroll();
 
-  /* Mobile menu */
+  /* The top bar slides away on scroll. Its height changes when it wraps on phones,
+     so measure it rather than hard-coding it in the CSS. */
+  var topbar = document.querySelector('.topbar');
+  function measureTopbar() { if (topbar) header.style.setProperty('--topbar-h', topbar.offsetHeight + 'px'); }
+  if (header && topbar) { measureTopbar(); window.addEventListener('resize', measureTopbar); }
+
+  /* Mobile menu: Escape closes it, the page behind doesn't scroll, and Tab stays inside it */
   var burger = document.getElementById('burger');
   var nav = document.getElementById('nav');
   if (burger && nav) {
-    var closeNav = function () { nav.classList.remove('is-open'); burger.setAttribute('aria-expanded', false); };
-    burger.addEventListener('click', function () {
-      var open = nav.classList.toggle('is-open');
+    var setNav = function (open) {
+      nav.classList.toggle('is-open', open);
       burger.setAttribute('aria-expanded', open);
+      burger.setAttribute('aria-label', open ? 'Close menu' : 'Open menu');
+      document.documentElement.classList.toggle('nav-open', open);
+    };
+    var navOpen = function () { return nav.classList.contains('is-open'); };
+    burger.addEventListener('click', function () { setNav(!navOpen()); });
+    nav.addEventListener('click', function (e) { if (e.target.tagName === 'A') setNav(false); });
+    document.addEventListener('keydown', function (e) {
+      if (!navOpen()) return;
+      if (e.key === 'Escape') { setNav(false); burger.focus(); return; }
+      if (e.key !== 'Tab') return;
+      var links = nav.querySelectorAll('a');
+      var first = burger, last = links[links.length - 1];
+      if (e.shiftKey && document.activeElement === first) { e.preventDefault(); last.focus(); }
+      else if (!e.shiftKey && document.activeElement === last) { e.preventDefault(); first.focus(); }
     });
-    nav.addEventListener('click', function (e) { if (e.target.tagName === 'A') closeNav(); });
-    document.addEventListener('keydown', function (e) { if (e.key === 'Escape') closeNav(); });
+    /* Close it if the window grows to the desktop layout */
+    if (window.matchMedia) {
+      var wide = window.matchMedia('(min-width: 1101px)');
+      var onWide = function () { if (wide.matches && navOpen()) setNav(false); };
+      if (wide.addEventListener) wide.addEventListener('change', onWide); else if (wide.addListener) wide.addListener(onWide);
+    }
+  }
+
+  /* Quote links on other pages can pre-pick the piece (e.g. "Commercial seating");
+     script.js reads this when the home page opens at the quote form. */
+  if (!document.getElementById('wizard')) {
+    document.addEventListener('click', function (e) {
+      var a = e.target.closest && e.target.closest('a[data-preset]');
+      if (a) { try { sessionStorage.setItem('jy-preset', a.dataset.preset); } catch (err) {} }
+    });
   }
 
   /* Reveal on scroll */
