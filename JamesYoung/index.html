@@ -441,87 +441,59 @@
   <button type="button" class="lightbox__nav lightbox__next" id="lbNext" aria-label="Next photo">›</button>
 </dialog>
 
-<!-- Quote wizard -->
+<!-- Quote form: one screen. Only name and phone are required. -->
 <section class="section" id="quote">
   <div class="wrap">
     <div class="head head--center reveal">
       <p class="kicker">Free photo quote</p>
       <h2>Get a quote without leaving the house</h2>
-      <p class="muted">Four quick steps. Add a few photos and we'll come back to you with a price and fabric suggestions.</p>
+      <p class="muted">One short form. Add a few photos if you have them and we'll come back to you with a price and fabric suggestions.</p>
     </div>
 
     <div class="quote">
-      <form class="wizard" id="wizard" novalidate>
-        <p class="wizard__count" id="stepNote" aria-live="polite">Step 1 of 4</p>
-        <ol class="wizard__bar" aria-hidden="true"><li class="on">Piece</li><li>Work</li><li>Photos</li><li>Details</li></ol>
-
-        <fieldset class="step is-active" data-step="1">
-          <legend>What would you like done?</legend>
-          <p class="hint">Choose the piece that best matches.</p>
-          <div class="choices">
-            <label class="choice"><input type="radio" name="piece" value="Sofa or suite"><span class="choice__in"><b>Sofa or suite</b><small>2 or 3 seater, corner units</small></span></label>
-            <label class="choice"><input type="radio" name="piece" value="Armchair"><span class="choice__in"><b>Armchair</b><small>Wingbacks, recliners, tub chairs</small></span></label>
-            <label class="choice"><input type="radio" name="piece" value="Dining chairs"><span class="choice__in"><b>Dining chairs</b><small>Seat pads or full reupholstery</small></span></label>
-            <label class="choice"><input type="radio" name="piece" value="Headboard"><span class="choice__in"><b>Headboard</b><small>Re-cover or new made to measure</small></span></label>
-            <label class="choice"><input type="radio" name="piece" value="Antique piece"><span class="choice__in"><b>Antique piece</b><small>Restoration and French polishing</small></span></label>
-            <label class="choice"><input type="radio" name="piece" value="Commercial seating"><span class="choice__in"><b>Commercial seating</b><small>Banquettes, booths, office, theatre</small></span></label>
-          </div>
-        </fieldset>
-
-        <fieldset class="step" data-step="2">
-          <legend>What does it need?</legend>
-          <p class="hint">Pick the closest option and tell us how many.</p>
-          <div class="choices">
-            <label class="choice"><input type="radio" name="work" value="Full reupholstery"><span class="choice__in"><b>Full reupholstery</b><small>New fabric, padding and springs as needed</small></span></label>
-            <label class="choice"><input type="radio" name="work" value="Re-cover only"><span class="choice__in"><b>Re-cover only</b><small>Fresh fabric, structure is sound</small></span></label>
-            <label class="choice"><input type="radio" name="work" value="Repair"><span class="choice__in"><b>Repair</b><small>Frame, springs, foam or a tear</small></span></label>
-            <label class="choice"><input type="radio" name="work" value="Not sure"><span class="choice__in"><b>Not sure</b><small>We'll advise from your photos</small></span></label>
-          </div>
-          <div class="qty">
-            <span id="qtyLabel">How many pieces?</span>
-            <div class="qty__ctrl" role="group" aria-labelledby="qtyLabel">
-              <button type="button" data-qty="-1" aria-label="Fewer">−</button>
-              <output id="qty">1</output>
-              <button type="button" data-qty="1" aria-label="More">+</button>
+      <form class="wizard qform" id="wizard" novalidate>
+        <div class="qform__body">
+          <div class="qf">
+            <p class="qf__label" id="pieceLabel">What is it? <small>(optional)</small></p>
+            <div class="chips" role="radiogroup" aria-labelledby="pieceLabel">
+              <label><input type="radio" name="piece" value="Sofa or suite"><span>Sofa or suite</span></label>
+              <label><input type="radio" name="piece" value="Armchair"><span>Armchair</span></label>
+              <label><input type="radio" name="piece" value="Dining chairs"><span>Dining chairs</span></label>
+              <label><input type="radio" name="piece" value="Headboard"><span>Headboard</span></label>
+              <label><input type="radio" name="piece" value="Antique piece"><span>Antique piece</span></label>
+              <label><input type="radio" name="piece" value="Commercial seating"><span>Commercial seating</span></label>
+              <label><input type="radio" name="piece" value="Something else"><span>Something else</span></label>
             </div>
           </div>
-        </fieldset>
 
-        <fieldset class="step" data-step="3">
-          <legend>Fabric and photos</legend>
-          <p class="hint">Any idea of the look you're after? Not decided is fine, we'll advise.</p>
-          <div class="chips">
-            <label><input type="radio" name="fabric" value="Velvet"><span>Velvet</span></label>
-            <label><input type="radio" name="fabric" value="Linen"><span>Linen</span></label>
-            <label><input type="radio" name="fabric" value="Woven"><span>Woven</span></label>
-            <label><input type="radio" name="fabric" value="Boucle"><span>Boucle</span></label>
-            <label><input type="radio" name="fabric" value="Leather"><span>Leather</span></label>
-            <label><input type="radio" name="fabric" value="Not decided"><span>Not decided</span></label>
+          <div class="qf">
+            <p class="qf__label">Photos <small>(optional, but they help us price it)</small></p>
+            <label class="drop" id="drop">
+              <input type="file" id="photos" accept="image/*" multiple>
+              <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 8h3l2-3h6l2 3h3v11H4z"/><circle cx="12" cy="13" r="3.5"/></svg>
+              <b>Add photos</b>
+              <small>Tap to take or choose photos, or drag them in</small>
+            </label>
+            <div class="thumbs" id="thumbs"></div>
           </div>
-          <label class="drop" id="drop">
-            <input type="file" id="photos" accept="image/*" multiple>
-            <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 8h3l2-3h6l2 3h3v11H4z"/><circle cx="12" cy="13" r="3.5"/></svg>
-            <b>Add photos</b>
-            <small>Front, side and any damage. Tap or drag in.</small>
-          </label>
-          <div class="thumbs" id="thumbs"></div>
-        </fieldset>
 
-        <fieldset class="step" data-step="4">
-          <legend>Where should we send your quote?</legend>
-          <p class="hint">We only use these details to reply to you. See our <a href="/privacy">privacy policy</a>.</p>
           <div class="fields">
             <label>Name<input type="text" name="name" autocomplete="name" required></label>
             <label>Phone<input type="tel" name="phone" autocomplete="tel" inputmode="tel" required></label>
-            <label class="full">Email <small>(optional)</small><input type="email" name="email" autocomplete="email"></label>
-            <label class="full">Area <small>(optional)</small><input type="text" name="area" autocomplete="address-level2" placeholder="e.g. Swords, Malahide"></label>
-            <label class="full">Anything else? <small>(optional)</small><textarea name="notes" rows="3" placeholder="Size, condition, deadline…"></textarea></label>
+            <label class="full"><span>Email <small>(optional)</small></span><input type="email" name="email" autocomplete="email"></label>
+            <label class="full"><span>What needs doing? <small>(optional)</small></span><textarea name="notes" rows="3" placeholder="e.g. 3-seater sofa in Swords, cushions need new foam"></textarea></label>
           </div>
           <!-- Hidden from people. Automated spam fills it in, and api/quote.js then ignores the request. -->
           <div class="hp" aria-hidden="true"><label>Leave this empty<input type="text" name="website" tabindex="-1" autocomplete="off"></label></div>
-        </fieldset>
 
-        <div class="step step--done" data-step="5">
+          <div class="wizard__nav">
+            <p class="wizard__err" id="err" role="alert"></p>
+            <button type="submit" class="btn btn--gold btn--lg" id="next">Send my request</button>
+          </div>
+          <p class="hint qform__privacy">We only use these details to reply to you. See our <a href="/privacy">privacy policy</a>.</p>
+        </div>
+
+        <div class="step--done" id="done" hidden>
           <span class="done__tick" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg></span>
           <h3 id="doneTitle">Thanks, your request is ready</h3>
           <!-- Shown when the website sent the request itself -->
@@ -539,23 +511,10 @@
           <p class="done__status" id="doneStatus" role="status"></p>
           <button type="button" class="btn btn--outline" id="restart">Start another quote</button>
         </div>
-
-        <div class="wizard__nav">
-          <button type="button" class="btn btn--text" id="back" hidden>← Back</button>
-          <p class="wizard__err" id="err" role="alert"></p>
-          <button type="button" class="btn btn--gold" id="next" disabled>Continue</button>
-        </div>
       </form>
 
       <aside class="summary">
-        <h3>Your request</h3>
-        <dl>
-          <div><dt>Piece</dt><dd data-sum="piece">–</dd></div>
-          <div><dt>Work</dt><dd data-sum="work">–</dd></div>
-          <div><dt>Quantity</dt><dd data-sum="qty">1</dd></div>
-          <div><dt>Fabric</dt><dd data-sum="fabric">–</dd></div>
-          <div><dt>Photos</dt><dd data-sum="photos">0 added</dd></div>
-        </dl>
+        <h3>Good to know</h3>
         <ul class="ticks">
           <li>Free, no-obligation quote</li>
           <li>Over 30 years in the trade</li>

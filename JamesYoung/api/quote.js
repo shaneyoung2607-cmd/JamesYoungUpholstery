@@ -66,22 +66,16 @@ module.exports = async function handler(req, res) {
     photos.push({ filename: 'photo-' + (photos.length + 1) + '.jpg', content: data });
   });
 
-  const text = [
-    'New quote request from the website',
-    '',
-    'Piece: ' + piece,
-    'Work: ' + line(b.work, 80),
-    'Quantity: ' + line(b.qty, 6),
-    'Fabric: ' + (line(b.fabric, 80) || 'Not decided'),
-    'Photos: ' + photos.length + (photos.length ? ' attached' : ''),
-    '',
-    'Name: ' + name,
-    'Phone: ' + phone,
-    'Email: ' + email,
-    'Area: ' + line(b.area, 120),
-    '',
-    'Notes: ' + block(b.notes, 4000)
-  ].join('\n');
+  const work = line(b.work, 80), qty = line(b.qty, 6), fabric = line(b.fabric, 80), area = line(b.area, 120), notes = block(b.notes, 4000);
+  const lines = ['New quote request from the website', '', 'Piece: ' + (piece || 'Not given')];
+  if (work) lines.push('Work: ' + work);
+  if (qty) lines.push('Quantity: ' + qty);
+  if (fabric) lines.push('Fabric: ' + fabric);
+  lines.push('Photos: ' + photos.length + (photos.length ? ' attached' : ''), '', 'Name: ' + name, 'Phone: ' + phone);
+  if (email) lines.push('Email: ' + email);
+  if (area) lines.push('Area: ' + area);
+  if (notes) lines.push('', 'What needs doing: ' + notes);
+  const text = lines.join('\n');
 
   const message = {
     from: FROM,

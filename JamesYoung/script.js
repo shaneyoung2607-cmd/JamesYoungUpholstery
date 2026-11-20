@@ -97,66 +97,21 @@
     if (Math.abs(dx) > 50 && Math.abs(dx) > Math.abs(dy) * 1.5) step(dx < 0 ? 1 : -1);
   }, { passive: true });
 
-  /* Quote wizard */
+  /* Quote form: one screen. Only name and phone are required. */
   var form = document.getElementById('wizard');
-  var steps = form.querySelectorAll('.step');
-  var bars = form.querySelectorAll('.wizard__bar li');
+  var body = form.querySelector('.qform__body');
+  var done = document.getElementById('done');
   var nextBtn = document.getElementById('next');
-  var backBtn = document.getElementById('back');
   var err = document.getElementById('err');
-  var stepNote = document.getElementById('stepNote');
-  var qtyOut = document.getElementById('qty');
   var photoInput = document.getElementById('photos');
   var drop = document.getElementById('drop');
   var thumbs = document.getElementById('thumbs');
-  var stepNo = 1, qty = 1, photos = [];
+  var photos = [];
 
   function val(name) { var el = form.querySelector('input[name="' + name + '"]:checked'); return el ? el.value : ''; }
-  function sum(key, v) { document.querySelector('[data-sum="' + key + '"]').textContent = v || '–'; }
-  function canContinue() {
-    if (stepNo === 1) return !!val('piece');
-    if (stepNo === 2) return !!val('work');
-    return true;
-  }
-  function render() {
-    steps.forEach(function (s) { s.classList.toggle('is-active', +s.dataset.step === stepNo); });
-    bars.forEach(function (b, i) { b.classList.toggle('on', i < stepNo); });
-    if (stepNo <= 4) stepNote.textContent = 'Step ' + stepNo + ' of 4';
-    backBtn.hidden = stepNo === 1 || stepNo === 5;
-    nextBtn.textContent = stepNo === 4 ? 'Send request' : 'Continue';
-    nextBtn.disabled = !canContinue();
-    form.classList.toggle('is-done', stepNo === 5);
-    err.textContent = '';
-  }
-  function go(n) {
-    stepNo = n; render();
-    var top = form.getBoundingClientRect().top + window.scrollY - 110;
-    if (window.scrollY > top) window.scrollTo({ top: top, behavior: 'smooth' });
-    var t = form.querySelector('.step.is-active legend, .step.is-active h3');
-    if (t) { t.tabIndex = -1; t.focus({ preventScroll: true }); }
-  }
 
-  /* Step 1 moves on by itself after a tap or click. Not for the keyboard: arrow keys
-     select each option as they pass it, so moving on would stop people choosing. */
-  var byPointer = false;
-  form.addEventListener('pointerdown', function () { byPointer = true; });
-  form.addEventListener('keydown', function () { byPointer = false; });
-
-  form.addEventListener('change', function (e) {
-    var n = e.target.name;
-    if (n === 'piece' || n === 'work' || n === 'fabric') sum(n, e.target.value);
-    nextBtn.disabled = !canContinue();
-    if (n === 'piece' && stepNo === 1 && byPointer) setTimeout(function () { if (stepNo === 1 && canContinue()) go(2); }, 250);
-  });
   form.addEventListener('input', function (e) {
     if (e.target.classList.contains('is-bad')) { e.target.classList.remove('is-bad'); e.target.removeAttribute('aria-invalid'); err.textContent = ''; }
-  });
-
-  form.querySelectorAll('[data-qty]').forEach(function (b) {
-    b.addEventListener('click', function () {
-      qty = Math.max(1, Math.min(200, qty + (+b.dataset.qty)));
-      qtyOut.textContent = qty; sum('qty', String(qty));
-    });
   });
 
   function addFiles(list) {
@@ -177,7 +132,7 @@
       x.onclick = function () { photos.splice(i, 1); drawThumbs(); };
       fig.appendChild(img); fig.appendChild(x); thumbs.appendChild(fig);
     });
-    sum('photos', photos.length + ' added');
+    drop.querySelector('b').textContent = photos.length ? 'Add more photos (' + photos.length + ' added)' : 'Add photos';
   }
   photoInput.addEventListener('change', function () { addFiles(photoInput.files); photoInput.value = ''; });
   ['dragenter', 'dragover'].forEach(function (t) { drop.addEventListener(t, function (e) { e.preventDefault(); drop.classList.add('is-over'); }); });
@@ -204,39 +159,27 @@
 
   /* The request as text: used for the email, the "Copy my details" button and photo sharing */
   function requestText() {
-    var e = form.elements;
-    return {
-      subject: 'Quote request: ' + val('piece') + ' (' + e.name.value.trim() + ')',
-      body: [
-        'Piece: ' + val('piece'),
-        'Work: ' + val('work'),
-        'Quantity: ' + qty,
-        'Fabric: ' + (val('fabric') || 'Not decided'),
-        'Photos: ' + photos.length + (photos.length ? ' (I will attach or send them)' : ''),
-        '',
-        'Name: ' + e.name.value.trim(),
-        'Phone: ' + e.phone.value.trim(),
-        'Email: ' + e.email.value.trim(),
-        'Area: ' + e.area.value.trim(),
-        '',
-        'Notes: ' + e.notes.value.trim()
-      ].join('\n')
-    };
+    var e = form.elements, piece = val('piece');
+    var lines = ['Piece: ' + (piece || 'Not given')];
+    lines.push('Photos: ' + photos.length + (photos.length ? ' (I will attach or send them)' : ''));
+    lines.push('', 'Name: ' + e.name.value.trim(), 'Phone: ' + e.phone.value.trim());
+    if (e.email.value.trim()) lines.push('Email: ' + e.email.value.trim());
+    if (e.notes.value.trim()) lines.push('', 'What needs doing: ' + e.notes.value.trim());
+    return { subject: 'Quote request: ' + (piece || 'Website') + ' (' + e.name.value.trim() + ')', body: lines.join('\n') };
   }
 
   var shareBtn = document.getElementById('sharePhotos');
   var copyBtn = document.getElementById('copyDetails');
   var doneStatus = document.getElementById('doneStatus');
-  function canSharePhotos() {
-    try { return photos.length > 0 && !!navigator.canShare && navigator.canShare({ files: photos }); } catch (e) { return false; }
-  }
-
   var doneTitle = document.getElementById('doneTitle');
   var doneSent = document.getElementById('doneSent');
   var doneEmail = document.getElementById('doneEmail');
   var openEmail = document.getElementById('openEmail');
   var sending = false;
 
+  function canSharePhotos() {
+    try { return photos.length > 0 && !!navigator.canShare && navigator.canShare({ files: photos }); } catch (e) { return false; }
+  }
   function lead(method) {
     if (window.JY && window.JY.track) window.JY.track('generate_lead', { form: 'quote', piece: val('piece'), photos: photos.length, method: method });
   }
@@ -288,9 +231,9 @@
         headers: { 'Content-Type': 'application/json' },
         signal: ctrl ? ctrl.signal : undefined,
         body: JSON.stringify({
-          piece: val('piece'), work: val('work'), qty: qty, fabric: val('fabric'),
+          piece: val('piece'),
           name: e.name.value.trim(), phone: e.phone.value.trim(), email: e.email.value.trim(),
-          area: e.area.value.trim(), notes: e.notes.value.trim(),
+          notes: e.notes.value.trim(),
           website: e.website ? e.website.value : '',
           photos: packed
         })
@@ -305,7 +248,17 @@
     });
   }
 
-  /* The success screen has two versions: sent for you, or finish it in your own email app */
+  function showScreen(isDone) {
+    form.classList.toggle('is-done', isDone);
+    body.hidden = isDone; done.hidden = !isDone;
+    var top = form.getBoundingClientRect().top + window.scrollY - 110;
+    if (window.scrollY > top) window.scrollTo({ top: top, behavior: 'smooth' });
+    var t = isDone ? doneTitle : form.elements.name;
+    if (isDone) t.tabIndex = -1;
+    t.focus({ preventScroll: true });
+  }
+
+  /* The thank-you screen has two versions: sent for you, or finish it in your own email app */
   function showDone(sentCount) {
     var online = sentCount !== null;
     doneSent.hidden = !online; doneEmail.hidden = online;
@@ -322,7 +275,7 @@
       /* An email link can't carry attachments. Where the phone can share files, offer its share sheet for the photos. */
       shareBtn.hidden = !canSharePhotos();
     }
-    go(5);
+    showScreen(true);
   }
 
   /* The fallback, and how the form always worked before: open the visitor's own email app */
@@ -335,17 +288,21 @@
     showDone(null);
   }
 
-  function submit() {
+  function resetButton() { sending = false; nextBtn.disabled = false; nextBtn.textContent = 'Send my request'; }
+
+  form.addEventListener('submit', function (ev) {
+    ev.preventDefault();
     if (sending) return;
+    var problem = validateContact();
+    if (problem) { err.textContent = problem; return; }
+    err.textContent = '';
     if (!window.fetch || !window.Promise) return submitByEmail();
-    sending = true;
-    nextBtn.disabled = true; backBtn.disabled = true; nextBtn.textContent = 'Sending…'; err.textContent = '';
-    var finish = function () { sending = false; backBtn.disabled = false; };
+    sending = true; nextBtn.disabled = true; nextBtn.textContent = 'Sending…';
     sendOnline().then(
-      function (sentCount) { finish(); lead('form'); showDone(sentCount); },
-      function () { finish(); submitByEmail(); }
+      function (sentCount) { resetButton(); lead('form'); showDone(sentCount); },
+      function () { resetButton(); submitByEmail(); }
     );
-  }
+  });
 
   /* Opens the phone's share sheet with the chosen photos, so they can go by email, WhatsApp or text */
   shareBtn.addEventListener('click', function () {
@@ -363,46 +320,31 @@
       var ta = document.createElement('textarea');
       ta.value = text; ta.setAttribute('readonly', ''); ta.style.cssText = 'position:fixed;opacity:0';
       document.body.appendChild(ta); ta.select();
-      var done = false; try { done = document.execCommand('copy'); } catch (e) {}
+      var copied = false; try { copied = document.execCommand('copy'); } catch (e) {}
       ta.remove();
-      doneStatus.textContent = done ? '' : 'Couldn\'t copy on this device. Please call 087 204 7560.';
-      if (done) ok();
+      doneStatus.textContent = copied ? '' : 'Couldn\'t copy on this device. Please call 087 204 7560.';
+      if (copied) ok();
     }
     if (navigator.clipboard && navigator.clipboard.writeText) navigator.clipboard.writeText(text).then(ok, fallback); else fallback();
   });
 
-  nextBtn.addEventListener('click', function () {
-    if (!canContinue()) return;
-    if (stepNo < 4) return go(stepNo + 1);
-    var problem = validateContact();
-    if (problem) { err.textContent = problem; return; }
-    submit();
-  });
-  backBtn.addEventListener('click', function () { if (stepNo > 1) go(stepNo - 1); });
-  form.addEventListener('keydown', function (e) {
-    if (e.key === 'Enter' && e.target.tagName === 'INPUT' && e.target.type !== 'radio') { e.preventDefault(); nextBtn.click(); }
-  });
-
   document.getElementById('restart').addEventListener('click', function () {
-    form.reset(); qty = 1; qtyOut.textContent = 1; photos = []; drawThumbs();
+    form.reset(); photos = []; drawThumbs();
     form.querySelectorAll('.is-bad').forEach(function (el) { el.classList.remove('is-bad'); el.removeAttribute('aria-invalid'); });
-    ['piece', 'work', 'fabric'].forEach(function (k) { sum(k, ''); }); sum('qty', '1');
-    go(1);
+    showScreen(false);
   });
 
   /* Links that pre-pick the piece, e.g. "Request a commercial quote" */
   function preset(value) {
     var r = form.querySelector('input[name="piece"][value="' + value + '"]');
-    if (r) { r.checked = true; sum('piece', r.value); stepNo = 2; }
+    if (r) r.checked = true;
   }
   document.querySelectorAll('[data-preset]').forEach(function (a) {
-    a.addEventListener('click', function () { preset(a.dataset.preset); render(); });
+    a.addEventListener('click', function () { preset(a.dataset.preset); });
   });
   /* The same, for quote links clicked on the service pages (stored by common.js) */
   try {
     var stored = sessionStorage.getItem('jy-preset');
     if (stored) { sessionStorage.removeItem('jy-preset'); if (location.hash === '#quote') preset(stored); }
   } catch (e) {}
-
-  render();
 })();

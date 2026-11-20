@@ -241,31 +241,11 @@ b, strong { font-weight: 500; }
 /* Quote */
 .quote { display: grid; grid-template-columns: 1fr 360px; gap: 28px; align-items: start; }
 .wizard { background: var(--char); border: 1px solid var(--line-d); padding: 44px; }
-.wizard__bar { list-style: none; padding: 0; margin: 0 0 40px; display: grid; grid-template-columns: repeat(4, 1fr); gap: 8px; counter-reset: st; }
-.wizard__bar li { counter-increment: st; font-size: .7rem; letter-spacing: .2em; text-transform: uppercase; color: var(--mute-d); padding-top: 12px; border-top: 2px solid rgba(255,255,255,.08); transition: color .3s, border-color .3s; }
-.wizard__bar li::before { content: "0" counter(st) "  "; color: inherit; white-space: pre; }
-.wizard__bar li.on { color: var(--gold); border-color: var(--gold); }
-.step { display: none; border: 0; padding: 0; margin: 0; min-width: 0; }
-.step.is-active { display: block; animation: fadeUp .45s var(--ease); }
-.step legend { font-family: var(--serif); font-size: 2.2rem; line-height: 1.1; padding: 0; margin-bottom: 6px; }
 .hint { color: var(--mute-d); font-size: .95rem; margin-bottom: 26px; }
-.choices { display: grid; grid-template-columns: repeat(2, 1fr); gap: 12px; }
-.choice input, .chips input { position: absolute; opacity: 0; pointer-events: none; }
-.choice__in { display: flex; flex-direction: column; gap: 2px; height: 100%; padding: 20px 22px; border: 1px solid rgba(255,255,255,.1); background: var(--char-2); cursor: pointer; transition: border-color .25s, background .25s; position: relative; }
-.choice__in::after { content: ""; position: absolute; top: 18px; right: 18px; width: 16px; height: 16px; border-radius: 50%; border: 1px solid rgba(201,169,97,.5); transition: all .25s; }
-.choice__in b { font-family: var(--serif); font-size: 1.35rem; }
-.choice__in small { color: var(--mute-d); font-size: .85rem; }
-.choice:hover .choice__in { border-color: rgba(201,169,97,.5); }
-.choice input:checked + .choice__in { border-color: var(--gold); background: rgba(201,169,97,.08); }
-.choice input:checked + .choice__in::after { background: var(--gold); box-shadow: inset 0 0 0 3px var(--char-2); }
-.choice input:focus-visible + .choice__in, .chips input:focus-visible + span { outline: 1.5px solid var(--gold); outline-offset: 2px; }
-.qty { display: flex; align-items: center; justify-content: space-between; margin-top: 22px; padding: 16px 22px; border: 1px solid rgba(255,255,255,.1); }
-.qty__ctrl { display: flex; align-items: center; gap: 18px; }
-.qty__ctrl button { width: 44px; height: 44px; border-radius: 50%; border: 1px solid rgba(201,169,97,.5); background: none; color: var(--gold); font-size: 1.1rem; cursor: pointer; }
-.qty__ctrl button:hover { background: var(--gold); color: var(--black); }
-.qty output { min-width: 26px; text-align: center; font-family: var(--serif); font-size: 1.6rem; }
+.chips input { position: absolute; opacity: 0; pointer-events: none; }
+.chips input:focus-visible + span { outline: 1.5px solid var(--gold); outline-offset: 2px; }
 .chips { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 22px; }
-.chips span { display: inline-block; padding: 9px 18px; border: 1px solid rgba(255,255,255,.14); cursor: pointer; font-size: .9rem; transition: all .25s; }
+.chips span { display: inline-flex; align-items: center; min-height: 44px; padding: 9px 18px; border: 1px solid rgba(255,255,255,.14); cursor: pointer; font-size: .9rem; transition: all .25s; }
 .chips span:hover { border-color: var(--gold); }
 .chips input:checked + span { background: var(--gold); color: var(--black); border-color: var(--gold); }
 .drop { display: flex; flex-direction: column; align-items: center; gap: 4px; padding: 34px; border: 1px dashed rgba(201,169,97,.55); cursor: pointer; text-align: center; transition: background .25s; }
@@ -289,7 +269,6 @@ b, strong { font-weight: 500; }
 .wizard__nav { display: flex; align-items: center; gap: 16px; margin-top: 36px; padding-top: 26px; border-top: 1px solid var(--line-d); }
 .wizard__nav #next { margin-left: auto; }
 .wizard__err { margin: 0; color: #E08A73; font-size: .9rem; }
-.wizard.is-done .wizard__nav, .wizard.is-done .wizard__bar, .wizard.is-done .wizard__count { display: none; }
 .step--done { text-align: center; padding: 24px 0; }
 .done__tick { display: grid; place-items: center; width: 68px; height: 68px; margin: 0 auto 20px; border-radius: 50%; border: 1px solid var(--gold); color: var(--gold); }
 .done__tick svg { width: 30px; height: 30px; stroke-width: 1.8; }
@@ -297,10 +276,6 @@ b, strong { font-weight: 500; }
 .step--done a:not(.btn) { color: var(--gold); }
 .summary { position: sticky; top: 110px; background: var(--ivory); color: var(--ink); padding: 34px; }
 .summary h3 { font-size: 1.7rem; margin-bottom: 16px; }
-.summary dl { margin: 0 0 26px; }
-.summary dl div { display: flex; justify-content: space-between; gap: 12px; padding: 10px 0; border-bottom: 1px solid var(--line-l); font-size: .92rem; }
-.summary dt { color: var(--mute); }
-.summary dd { margin: 0; font-weight: 500; text-align: right; }
 .ticks { list-style: none; padding: 0; margin: 0 0 24px; display: grid; gap: 10px; font-size: .92rem; }
 .ticks li { display: flex; gap: 12px; }
 .ticks li::before { content: "✦"; color: var(--gold-d); font-size: .7rem; padding-top: 5px; }
@@ -382,7 +357,6 @@ b, strong { font-weight: 500; }
   html { scroll-behavior: auto; }
   .reveal { opacity: 1; transform: none; transition: none; }
   .ticker__track { animation: none; }
-  .step.is-active { animation: none; }
   .btn:active:not(:disabled) { transform: none; }
   .tile img, .svc { transition: none; }
 }
@@ -459,9 +433,6 @@ b, strong { font-weight: 500; }
   .tile__cap { opacity: 1; transform: none; }
   .comm__imgs img:last-child { margin-top: 36px; }
   .wizard { padding: 26px 20px; }
-  .wizard__bar li { font-size: 0; }
-  .wizard__bar li::before { font-size: .7rem; }
-  .choices { grid-template-columns: 1fr; }
   .fields { grid-template-columns: 1fr; }
   .summary { padding: 26px 22px; }
   .visit__card { padding: 30px 22px; }
@@ -631,8 +602,8 @@ b, strong { font-weight: 500; }
   .btn--outline { border-color: var(--gold); }
 }
 @media (forced-colors: active) {
-  .btn, .filters button, .chips span, .choice__in { border: 1px solid ButtonText; }
-  .choice input:checked + .choice__in, .chips input:checked + span, .filters button.is-on { outline: 3px solid Highlight; outline-offset: -3px; }
+  .btn, .filters button, .chips span { border: 1px solid ButtonText; }
+  .chips input:checked + span, .filters button.is-on { outline: 3px solid Highlight; outline-offset: -3px; }
   .burger span { background: ButtonText; }
   .status__dot { forced-color-adjust: none; }
 }
@@ -673,10 +644,25 @@ b, strong { font-weight: 500; }
 }
 
 /* ---------- Wizard progress and optional fields ---------- */
-.sr-only, .wizard__count { position: absolute; width: 1px; height: 1px; margin: -1px; overflow: hidden; clip-path: inset(50%); white-space: nowrap; }
 .fields label small { font-size: inherit; letter-spacing: .06em; text-transform: none; opacity: .8; }
 @media (max-width: 640px) {
   /* the step names are hidden on phones, so show the count in words instead */
-  .wizard__count { position: static; width: auto; height: auto; margin: 0 0 10px; clip-path: none; font-size: .7rem; letter-spacing: .2em; text-transform: uppercase; color: var(--gold); }
   .footer__cookies, .footer a.footer__cookies { padding: 11px 0; margin-top: 0; }
+}
+
+/* ---------- One-screen quote form ---------- */
+.sr-only { position: absolute; width: 1px; height: 1px; margin: -1px; overflow: hidden; clip-path: inset(50%); white-space: nowrap; }
+.qf { margin-bottom: 30px; }
+.qf__label { margin: 0 0 12px; font-size: .72rem; letter-spacing: .2em; text-transform: uppercase; color: var(--mute-d); }
+.qf__label small, .fields label small { font-size: inherit; letter-spacing: .06em; text-transform: none; opacity: .8; }
+.qform .chips { margin-bottom: 0; }
+.qform .drop { padding: 26px; }
+.qform .wizard__nav { margin-top: 30px; padding-top: 0; border-top: 0; }
+.qform__privacy { margin: 14px 0 0; font-size: .85rem; text-align: right; }
+.qform.is-done { padding-top: 56px; padding-bottom: 56px; }
+@media (max-width: 640px) {
+  .qform .wizard__nav { flex-direction: column-reverse; align-items: stretch; gap: 10px; }
+  .qform .wizard__nav #next { margin-left: 0; width: 100%; }
+  .qform__privacy { text-align: left; }
+  .qform .chips span { padding: 9px 14px; font-size: .86rem; }
 }
