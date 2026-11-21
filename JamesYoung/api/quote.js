@@ -80,7 +80,7 @@ module.exports = async function handler(req, res) {
   const message = {
     from: FROM,
     to: [TO],
-    subject: 'Quote request: ' + (piece || 'Website') + ' (' + name + ')',
+    subject: 'Quote request: ' + (Number(qty) > 1 ? qty + ' x ' : '') + (piece || 'Website') + (area ? ', ' + area : '') + ' (' + name + ')',
     text: text
   };
   if (emailOk) message.reply_to = email; // so James can simply press Reply

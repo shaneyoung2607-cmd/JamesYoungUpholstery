@@ -110,6 +110,14 @@
 
   function val(name) { var el = form.querySelector('input[name="' + name + '"]:checked'); return el ? el.value : ''; }
 
+  /* Quantity: the − and + buttons, kept between 1 and 999 */
+  var qtyInput = document.getElementById('qty');
+  function qty() { var n = parseInt(qtyInput.value, 10); return isNaN(n) ? 1 : Math.min(999, Math.max(1, n)); }
+  form.querySelectorAll('[data-qty]').forEach(function (b) {
+    b.addEventListener('click', function () { qtyInput.value = Math.min(999, Math.max(1, qty() + parseInt(b.dataset.qty, 10))); });
+  });
+  qtyInput.addEventListener('change', function () { qtyInput.value = qty(); });
+
   form.addEventListener('input', function (e) {
     if (e.target.classList.contains('is-bad')) { e.target.classList.remove('is-bad'); e.target.removeAttribute('aria-invalid'); err.textContent = ''; }
   });
@@ -160,12 +168,14 @@
   /* The request as text: used for the email, the "Copy my details" button and photo sharing */
   function requestText() {
     var e = form.elements, piece = val('piece');
-    var lines = ['Piece: ' + (piece || 'Not given')];
+    var lines = ['Piece: ' + (piece || 'Not given'), 'Quantity: ' + qty()];
+    if (e.area.value.trim()) lines.push('Area: ' + e.area.value.trim());
     lines.push('Photos: ' + photos.length + (photos.length ? ' (I will attach or send them)' : ''));
     lines.push('', 'Name: ' + e.name.value.trim(), 'Phone: ' + e.phone.value.trim());
     if (e.email.value.trim()) lines.push('Email: ' + e.email.value.trim());
     if (e.notes.value.trim()) lines.push('', 'What needs doing: ' + e.notes.value.trim());
-    return { subject: 'Quote request: ' + (piece || 'Website') + ' (' + e.name.value.trim() + ')', body: lines.join('\n') };
+    var where = e.area.value.trim();
+    return { subject: 'Quote request: ' + (qty() > 1 ? qty() + ' x ' : '') + (piece || 'Website') + (where ? ', ' + where : '') + ' (' + e.name.value.trim() + ')', body: lines.join('\n') };
   }
 
   var shareBtn = document.getElementById('sharePhotos');
@@ -181,7 +191,7 @@
     try { return photos.length > 0 && !!navigator.canShare && navigator.canShare({ files: photos }); } catch (e) { return false; }
   }
   function lead(method) {
-    if (window.JY && window.JY.track) window.JY.track('generate_lead', { form: 'quote', piece: val('piece'), photos: photos.length, method: method });
+    if (window.JY && window.JY.track) window.JY.track('generate_lead', { form: 'quote', piece: val('piece'), qty: qty(), photos: photos.length, method: method });
   }
 
   /* Shrinks a photo in the browser. Resolves to base64 JPEG data, or '' if the file can't be read. */
@@ -231,7 +241,7 @@
         headers: { 'Content-Type': 'application/json' },
         signal: ctrl ? ctrl.signal : undefined,
         body: JSON.stringify({
-          piece: val('piece'),
+          piece: val('piece'), qty: String(qty()), area: e.area.value.trim(),
           name: e.name.value.trim(), phone: e.phone.value.trim(), email: e.email.value.trim(),
           notes: e.notes.value.trim(),
           website: e.website ? e.website.value : '',

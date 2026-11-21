@@ -467,6 +467,19 @@
             </div>
           </div>
 
+          <div class="qf fields qf--pair">
+            <div class="qty">
+              <span id="qtyLabel">How many?</span>
+              <div class="qty__ctrl" role="group" aria-labelledby="qtyLabel">
+                <button type="button" data-qty="-1" aria-label="One fewer">&minus;</button>
+                <input type="number" name="qty" id="qty" value="1" min="1" max="999" inputmode="numeric" aria-labelledby="qtyLabel">
+                <button type="button" data-qty="1" aria-label="One more">+</button>
+              </div>
+            </div>
+            <label>Your area<input type="text" name="area" list="areaList" autocomplete="address-level2" placeholder="e.g. Swords or Dublin 2"></label>
+            <datalist id="areaList"><option value="Dublin city centre"><option value="Dublin 1"><option value="Dublin 2"><option value="Dublin 4"><option value="Dublin 6"><option value="Dublin 7"><option value="Dublin 8"><option value="Temple Bar"><option value="Smithfield"><option value="Docklands"><option value="Ballsbridge"><option value="Donnybrook"><option value="Ranelagh"><option value="Rathmines"><option value="Rathgar"><option value="Terenure"><option value="Rathfarnham"><option value="Dundrum"><option value="Stillorgan"><option value="Sandyford"><option value="Tallaght"><option value="Blackrock"><option value="Monkstown"><option value="Dún Laoghaire"><option value="Dalkey"><option value="Killiney"><option value="Foxrock"><option value="Cabinteely"><option value="Clontarf"><option value="Drumcondra"><option value="Glasnevin"><option value="Phibsborough"><option value="Santry"><option value="Raheny"><option value="Artane"><option value="Coolock"><option value="Beaumont"><option value="Finglas"><option value="Swords"><option value="Malahide"><option value="Portmarnock"><option value="Howth"><option value="Sutton"><option value="Donabate"><option value="Rush"><option value="Lusk"><option value="Skerries"><option value="Balbriggan"><option value="Castleknock"><option value="Blanchardstown"><option value="Lucan"><option value="Clondalkin"><option value="Palmerstown"><option value="Chapelizod"><option value="Outside Dublin"></datalist>
+          </div>
+
           <div class="qf">
             <p class="qf__label">Photos <small>(optional, but they help us price it)</small></p>
             <label class="drop" id="drop">
@@ -476,13 +489,14 @@
               <small>Tap to take or choose photos, or drag them in</small>
             </label>
             <div class="thumbs" id="thumbs"></div>
+            <p class="hint qf__alt">Easier from your phone? Text your photos to <a href="sms:+353872047560">087 204 7560</a>.</p>
           </div>
 
           <div class="fields">
             <label>Name<input type="text" name="name" autocomplete="name" required></label>
             <label>Phone<input type="tel" name="phone" autocomplete="tel" inputmode="tel" required></label>
             <label class="full"><span>Email <small>(optional)</small></span><input type="email" name="email" autocomplete="email"></label>
-            <label class="full"><span>What needs doing? <small>(optional)</small></span><textarea name="notes" rows="3" placeholder="e.g. 3-seater sofa in Swords, cushions need new foam"></textarea></label>
+            <label class="full"><span>What needs doing? <small>(optional)</small></span><textarea name="notes" rows="3" placeholder="e.g. 3-seater sofa, cushions need new foam"></textarea></label>
           </div>
           <!-- Hidden from people. Automated spam fills it in, and api/quote.js then ignores the request. -->
           <div class="hp" aria-hidden="true"><label>Leave this empty<input type="text" name="website" tabindex="-1" autocomplete="off"></label></div>

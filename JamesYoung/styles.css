@@ -659,6 +659,16 @@ b, strong { font-weight: 500; }
 .qf__label small, .fields label small { font-size: inherit; letter-spacing: .06em; text-transform: none; opacity: .8; }
 .qform .chips { margin-bottom: 0; }
 .qform .drop { padding: 26px; }
+.qf--pair { grid-template-columns: auto 1fr; align-items: end; gap: 16px 32px; }
+.qty { display: flex; flex-direction: column; gap: 8px; font-size: .72rem; letter-spacing: .2em; text-transform: uppercase; color: var(--mute-d); }
+.qty__ctrl { display: flex; align-items: center; gap: 10px; }
+.qty__ctrl button { width: 44px; height: 44px; border-radius: 50%; border: 1px solid rgba(201,169,97,.5); background: none; color: var(--gold); font-size: 1.2rem; line-height: 1; cursor: pointer; transition: background .2s, color .2s; }
+.qty__ctrl button:hover { background: var(--gold); color: var(--black); }
+.qty__ctrl button:focus-visible { outline: 1.5px solid var(--gold); outline-offset: 2px; }
+.fields .qty__ctrl input { width: 64px; padding: 8px 0; text-align: center; font: 500 1.5rem var(--serif); -moz-appearance: textfield; appearance: textfield; }
+.qty__ctrl input::-webkit-outer-spin-button, .qty__ctrl input::-webkit-inner-spin-button { -webkit-appearance: none; margin: 0; }
+.qf__alt { margin: 12px 0 0; font-size: .88rem; color: var(--mute-d); }
+.qf__alt a { color: var(--gold); white-space: nowrap; }
 .qform .wizard__nav { margin-top: 30px; padding-top: 0; border-top: 0; }
 .qform__privacy { margin: 14px 0 0; font-size: .85rem; text-align: right; }
 .qform.is-done { padding-top: 56px; padding-bottom: 56px; }
@@ -667,4 +677,5 @@ b, strong { font-weight: 500; }
   .qform .wizard__nav #next { margin-left: 0; width: 100%; }
   .qform__privacy { text-align: left; }
   .qform .chips span { padding: 9px 14px; font-size: .86rem; }
+  .qf--pair { grid-template-columns: 1fr; gap: 22px; }
 }
