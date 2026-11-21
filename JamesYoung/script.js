@@ -9,7 +9,7 @@
   document.getElementById('mapLoad').addEventListener('click', function () {
     var map = document.getElementById('map');
     var f = document.createElement('iframe');
-    f.title = 'Map to the James Young Upholstery workshop';
+    f.title = 'Map to the James Young Upholstery factory';
     f.referrerPolicy = 'no-referrer-when-downgrade';
     f.src = map.dataset.src;
     map.innerHTML = ''; map.appendChild(f);
@@ -26,9 +26,9 @@
      Photos show in the order listed here.
      --------------------------------------------------------------- */
   var WORK = [
-    { src: 'images/wingback-chair.webp',         thumb: 'images/wingback-chair-800.webp',         type: 'domestic',   title: 'Wingback armchair in willow-leaf weave', place: 'Reupholstered in our workshop', size: 'tall' },
+    { src: 'images/wingback-chair.webp',         thumb: 'images/wingback-chair-800.webp',         type: 'domestic',   title: 'Wingback armchair in willow-leaf weave', place: 'Reupholstered in our factory', size: 'tall' },
     { src: 'images/function-room-chairs.webp',                                                     type: 'commercial', title: 'Function room chairs',            place: 'Event venue, Dublin' },
-    { src: 'images/office-chairs.webp',                                                            type: 'commercial', title: 'Green leather office chairs',     place: 'Reupholstered in our workshop' },
+    { src: 'images/office-chairs.webp',                                                            type: 'commercial', title: 'Green leather office chairs',     place: 'Reupholstered in our factory' },
     { src: 'images/hotel-lounge-banquette.webp', thumb: 'images/hotel-lounge-banquette-800.webp', type: 'commercial', title: 'Channel-tufted velvet banquette', place: 'Hotel lounge, Dublin', size: 'wide' },
     { src: 'images/showroom.webp',               thumb: 'images/showroom-800.webp',               type: 'domestic',   title: 'Corner sofa, headboards and wall panels', place: 'Our showroom, North County Dublin', size: 'wide' },
     { src: 'images/banquette-bar.webp',                                                            type: 'commercial', title: 'Velvet banquette and cushions',   place: 'Hotel bar, Dublin' },

@@ -116,7 +116,7 @@ b, strong { font-weight: 500; }
 .burger[aria-expanded="true"] span:nth-child(2) { transform: translateY(-3.75px) rotate(-45deg); }
 
 /* Hero */
-.hero { position: relative; padding: 190px 0 0; background:
+.hero { position: relative; padding: 168px 0 0; background:
   radial-gradient(ellipse 60% 50% at 80% 30%, rgba(201,169,97,.10), transparent 70%),
   var(--black); overflow: hidden; }
 .hero__in { display: grid; grid-template-columns: 1.1fr .9fr; gap: 72px; align-items: center; }
@@ -617,6 +617,8 @@ b, strong { font-weight: 500; }
 }
 
 /* ---------- Small additions ---------- */
+.hero__welcome { font-family: var(--serif); font-style: italic; font-size: clamp(1.45rem, 2.4vw, 2rem); line-height: 1.2; color: var(--text-d); margin: 0 0 26px; padding-bottom: 22px; border-bottom: 1px solid rgba(201,169,97,.28); max-width: 560px; }
+.hero__welcome span { color: var(--gold); font-style: normal; }
 .hero__trade { margin: 22px 0 0; font-size: .92rem; color: var(--mute-d); }
 .hero__trade a { color: var(--gold); text-underline-offset: 4px; text-decoration-color: rgba(201,169,97,.5); }
 .hero__trade a:hover { text-decoration-color: currentColor; }

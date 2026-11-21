@@ -106,7 +106,7 @@
   var isOpen = today && now.mins >= today[0] && now.mins < today[1];
   openDot.classList.toggle('is-open', !!isOpen);
   openText.textContent = isOpen
-    ? 'Workshop open until ' + fmt(today[1])
+    ? 'Factory open until ' + fmt(today[1])
     : 'Closed now · send photos any time for a quote';
   var row = document.querySelector('#hours tr[data-day="' + now.day + '"]');
   if (row) row.classList.add('is-today');
